@@ -1,0 +1,9 @@
+changes made to the the repo:
+add fWriteMatrix_to_output in the fWriteMatrix.c file and also its head in the sdvbs_common.h
+
+Make file has changes (in the common folder). I recommmend copying over the entire common folder
+
+to run
+cd data/sim 
+gmake c‐run 
+
