@@ -1,0 +1,119 @@
+./calcSobel_dX.c:F2D* calcSobel_dX(F2D* imageIn)
+./calcSobel_dX.c:    F2D *kernel_1, *kernel_2;
+./calcSobel_dX.c:    F2D *imageOut, *tempOut;
+./calcSobel_dY.c:F2D* calcSobel_dY(F2D* imageIn)
+./calcSobel_dY.c:    F2D *imageOut, *tempOut;
+./fDeepCopy.c:F2D* fDeepCopy(F2D* in)
+./fDeepCopy.c:    F2D* out;
+./fDeepCopyRange.c:F2D* fDeepCopyRange(F2D* in, int startRow, int numberRows, int startCol, int numberCols)
+./fDeepCopyRange.c:    F2D *out;
+./fDivide.c:F2D* fDivide(F2D* a, float b)
+./fDivide.c:    F2D *c;
+./ffConv2.c:F2D* ffConv2(F2D* a, F2D* b)
+./ffConv2.c:    F2D *c, *out;
+./ffConv2_dY.c:F2D* ffConv2_dY(F2D* a, F2D* b)
+./ffConv2_dY.c:    F2D *c, *out;
+./ffDivide.c:F2D* ffDivide(F2D* a, F2D* b)
+./ffDivide.c:    F2D *c;
+./ffiConv2.c:F2D* ffiConv2(F2D* a, I2D* b)
+./ffiConv2.c:    F2D *c;
+./ffiConv2.c:    F2D *out;
+./fFind3.c:F2D* fFind3(F2D* in)
+./fFind3.c:    F2D *points;
+./fFreeHandle.c:void fFreeHandle(F2D* out)
+./ffTimes.c:F2D* ffTimes(F2D* a, float b)
+./ffTimes.c:    F2D *c;
+./ffVertcat.c:F2D* ffVertcat(F2D* matrix1, F2D* matrix2)
+./ffVertcat.c:    F2D *outMatrix;
+./fHorzcat.c:F2D* fHorzcat(F2D* a, F2D* b)
+./fHorzcat.c:    F2D* out_, *out, *c;
+./fiConv2.c:F2D* fiConv2(I2D* a, F2D* b)
+./fiConv2.c:    F2D *c;
+./fiConv2.c:    F2D *out;
+./fiDeepCopy.c:F2D* fiDeepCopy(I2D* in)
+./fiDeepCopy.c:    F2D *out;
+./fMallocHandle.c:F2D* fMallocHandle(int rows, int cols)
+./fMallocHandle.c:    F2D* out;
+./fMallocHandle.c:    out = (F2D*)malloc(sizeof(F2D) + sizeof(float)*rows*cols);
+./fMdivide.c:F2D* fMdivide(F2D* a, F2D* b)
+./fMdivide.c:    F2D *c;
+./fMinus.c:F2D* fMinus(F2D* a, F2D* b)
+./fMinus.c:    F2D *c;
+./fMtimes.c:F2D* fMtimes(F2D* a, F2D* b)
+./fMtimes.c:    F2D *out;
+./fPlus.c:F2D* fPlus(F2D* a, F2D* b)
+./fPlus.c:    F2D *c;
+./fReshape.c:F2D* fReshape(F2D* in, int rows, int cols)
+./fReshape.c:    F2D *out;
+./fSelfCheck.c:int fSelfCheck(F2D* in1, char* path, float tol)
+./fSetArray.c:F2D* fSetArray(int rows, int cols, float val)
+./fSetArray.c:    F2D *out;
+./fSort.c:F2D* fSort(F2D* in, int dim)
+./fSort.c:    F2D *sorted;
+./fSortIndices.c:I2D* fSortIndices(F2D* input, int dim)
+./fSortIndices.c:    F2D *in;
+./fSum2.c:F2D* fSum2(F2D* inMat, int dir)
+./fSum2.c:    F2D *outMat;
+./fSum.c:F2D* fSum(F2D* inMat)
+./fSum.c:    F2D *outMat;
+./fTimes.c:F2D* fTimes(F2D* a, F2D* b)
+./fTimes.c:    F2D *c;
+./fTranspose.c:F2D* fTranspose(F2D* a)
+./fTranspose.c:    F2D *out;
+./fWriteMatrix.c:void fWriteMatrix(F2D* input, char* inpath)
+./horzcat.c:F2D* horzcat(F2D* a, F2D* b, F2D* c)
+./horzcat.c:    F2D *out;
+./ifDeepCopy.c:I2D* ifDeepCopy(F2D* in)
+./ifMtimes.c:F2D* ifMtimes(I2D* a, F2D* b)
+./ifMtimes.c:    F2D *out;
+./imageBlur.c:F2D* imageBlur(I2D* imageIn)
+./imageBlur.c:    F2D *imageOut, *tempOut;
+./imageResize.c:F2D* imageResize(F2D* imageIn)
+./imageResize.c:    F2D *imageOut;
+./imageResize.c:    F2D *temp;
+./randnWrapper.c:F2D* randnWrapper(int m, int n)
+./randnWrapper.c:    F2D *out;
+./randWrapper.c:F2D* randWrapper(int m, int n)
+./randWrapper.c:    F2D *out;
+./readFile.c:F2D* readFile(unsigned char* fileName)
+./readFile.c:    F2D *fill;
+./sdvbs_common.h:}F2D;
+./sdvbs_common.h:F2D* readFile(unsigned char* fileName);
+./sdvbs_common.h:F2D* fMallocHandle(int rows, int cols);
+./sdvbs_common.h:void fFreeHandle(F2D* out);
+./sdvbs_common.h:F2D* fSetArray(int rows, int cols, float val);
+./sdvbs_common.h:F2D* fDeepCopy(F2D* in);
+./sdvbs_common.h:F2D* fDeepCopyRange(F2D* in, int startRow, int numberRows, int startCol, int numberCols);
+./sdvbs_common.h:F2D* fiDeepCopy(I2D* in);
+./sdvbs_common.h:I2D* ifDeepCopy(F2D* in);
+./sdvbs_common.h:F2D* ffVertcat(F2D* matrix1, F2D* matrix2);
+./sdvbs_common.h:F2D* fHorzcat(F2D* a, F2D* b);
+./sdvbs_common.h:F2D* horzcat(F2D* a, F2D* b, F2D* c);
+./sdvbs_common.h:F2D* fTranspose(F2D* a);
+./sdvbs_common.h:F2D* fReshape(F2D* in, int rows, int cols);
+./sdvbs_common.h:F2D* fDivide(F2D* a, float b);
+./sdvbs_common.h:F2D* fMdivide(F2D* a, F2D* b);
+./sdvbs_common.h:F2D* ffDivide(F2D* a, F2D* b);
+./sdvbs_common.h:F2D* ffTimes(F2D* a, float b);
+./sdvbs_common.h:F2D* fTimes(F2D* a, F2D* b);
+./sdvbs_common.h:F2D* fMtimes(F2D* a, F2D* b);
+./sdvbs_common.h:F2D* ifMtimes(I2D* a, F2D* b);
+./sdvbs_common.h:F2D* fMinus(F2D* a, F2D* b);
+./sdvbs_common.h:F2D* fPlus(F2D* a, F2D* b);
+./sdvbs_common.h:F2D* calcSobel_dX(F2D* imageIn);
+./sdvbs_common.h:F2D* calcSobel_dY(F2D* imageIn);
+./sdvbs_common.h:F2D* ffConv2(F2D* a, F2D* b);
+./sdvbs_common.h:F2D* fiConv2(I2D* a, F2D* b);
+./sdvbs_common.h:F2D* ffConv2_dY(F2D* a, F2D* b);
+./sdvbs_common.h:F2D* ffiConv2(F2D* a, I2D* b);
+./sdvbs_common.h:F2D* imageResize(F2D* imageIn);
+./sdvbs_common.h:F2D* imageBlur(I2D* imageIn);
+./sdvbs_common.h:F2D* fFind3(F2D* in);
+./sdvbs_common.h:F2D* fSum2(F2D* inMat, int dir);
+./sdvbs_common.h:F2D* fSum(F2D* inMat);
+./sdvbs_common.h:F2D* fSort(F2D* in, int dim);
+./sdvbs_common.h:I2D* fSortIndices(F2D* input, int dim);
+./sdvbs_common.h:F2D* randnWrapper(int m, int n);
+./sdvbs_common.h:F2D* randWrapper(int m, int n);
+./sdvbs_common.h:int fSelfCheck(F2D* in1, char* path, float tol);
+./sdvbs_common.h:void fWriteMatrix(F2D* input, char* inpath);
