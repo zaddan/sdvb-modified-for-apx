@@ -12,7 +12,6 @@ using namespace std;
 #include "mser.h"
 #define min(a,b) (a<b)?a:b
 #define max(a,b) (a>b)?a:b
-
 int main(int argc, char* argv[])
 {
     // Added by Behzad for apxation 

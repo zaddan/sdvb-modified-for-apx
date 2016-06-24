@@ -17,6 +17,7 @@ Author: Sravanthi Kota Venkata
 #include <stdio.h>
 #include <stdlib.h>
 #include "globals.h"
+#include <assert.h>
 extern hw_ac **myOp;   
 
 
@@ -25,6 +26,7 @@ extern hw_ac **myOp;
 
 #define MIN(a,b) (a<b)?a:b
 #define MAX(a,b) (a>b)?a:b
+#define APX
 
 typedef int  unsigned idx_t ;
 typedef long long int unsigned acc_t ;
@@ -79,7 +81,6 @@ adv(iArray *dims, int ndims, iArray *subs_pt)
 I2D* mser(I2D* I, int in_delta)
 {
     
-   //float test_var = myOp[0]->calc(2, 5); //AdditionOp
    idx_t i, rindex=0;
    int k;
    int nout = 1;
@@ -144,7 +145,8 @@ I2D* mser(I2D* I, int in_delta)
     
     sref(dims,0) = I->height;
     sref(dims,1) = I->width;
-    
+    //cout<<"===height"<<I->height<<endl;
+    //cout<<"===width"<<I->width<<endl;
     /* allocate stuff */
     subs_pt = (iArray*)malloc(sizeof(iArray) + sizeof(int)*ndims);
     nsubs_pt = (iArray*)malloc(sizeof(iArray) + sizeof(int)*ndims);
@@ -161,16 +163,15 @@ I2D* mser(I2D* I, int in_delta)
 
     forest_pt = (node_t*)malloc(sizeof(node_t)*nel);
     forest_pt_size = nel;
-
+    int tempApx, tempAcc;
     /* compute strides to move into the N-dimensional image array */
     sref(strides_pt,0) = 1;
     for(k = 1 ; k < ndims ; ++k)
     {
         
-   //float test_var = myOp[0]->calc(2, 5); //AdditionOp
-        sref(strides_pt,k) = myOp[0]->calc(sref(strides_pt,k-1), sref(dims,k-1)) ;
-        //sref(strides_pt,k) = sref(strides_pt,k-1) * sref(dims,k-1) ;
+        sref(strides_pt,k) = sref(strides_pt,k-1) * sref(dims,k-1) ;
                 }
+
 
     /* sort pixels in increasing order of intensity: using Bucket Sort */
     {
@@ -185,7 +186,19 @@ I2D* mser(I2D* I, int in_delta)
         
         for(i = 1 ; i < BUCKETS ; ++i) 
         {
-            arrayref(buckets,i) += arrayref(buckets,i-1) ;
+            
+#ifdef APX1  //goes to an infite loop
+            tempApx =  myOp[0]->calc(arrayref(buckets,i), arrayref(buckets,i-1)); //AdditionOp
+            tempAcc = arrayref(buckets,i) + arrayref(buckets,i-1); 
+            if (tempApx == 0 & tempAcc!=0) {
+                arrayref(buckets,i) = tempAcc;
+            }else{
+                arrayref(buckets,i) = tempApx;
+            }
+
+#else
+            arrayref(buckets,i) += arrayref(buckets,i-1); 
+#endif 
         }
         
         for(i = nel ; i >= 1 ; )
@@ -249,11 +262,36 @@ I2D* mser(I2D* I, int in_delta)
          and check that the pixel is within image boundaries. */
             for(k = 0 ; k < ndims && good ; ++k) 
             {
-                int temp = sref(nsubs_pt,k) + sref(subs_pt,k) ;
+#ifdef APX
+                 
+                tempApx = myOp[1]->calc(sref(nsubs_pt,k), sref(subs_pt,k)); //AdditionOp
+                tempAcc = sref(nsubs_pt,k) + sref(subs_pt,k) ; 
+                int temp; 
+                if (tempApx == 0 & tempAcc!=0) {
+                    temp = tempAcc;
+                }else{
+                    temp = tempApx;
+                }
+#else
+                int temp = sref(nsubs_pt,k) + sref(subs_pt,k) ; 
+#endif
+
                 good &= 0 <= temp && temp < sref(dims,k) ;
-                nindex += temp * sref(strides_pt,k) ;
+                 
+#ifdef APX 
+                int nindex_temp =   myOp[2]->calc(temp, sref(strides_pt,k)); //MultiplicationOp
+                tempApx = myOp[3]->calc(nindex, nindex_temp); //AdditionOp
+                tempAcc = nindex + temp * sref(strides_pt,k) ; 
+                if (tempApx == 0 & tempAcc!=0) {
+                    nindex = tempAcc;
+                }else{
+                    nindex = tempApx;
+                }
+
+#else
+                nindex += temp * sref(strides_pt,k) ; 
+#endif
             }      
-      
 
       /* keep going only if
          1 - the neighbor is within image boundaries;
@@ -264,6 +302,15 @@ I2D* mser(I2D* I, int in_delta)
       */
             if(good && nindex != index && forest_pt[nindex].parent != node_is_void ) 
             {
+                //behzad added 
+                /* 
+                cout<<"::index"<<index<<endl;
+                cout<<"::nindex"<<nindex<<endl;
+                int blah = nindex - index; 
+                cout<<"::diff"<<blah<<endl;
+                */                
+                //end of behzad added 
+                
                 idx_t nrindex = 0, nvisited ;
                 val_t nrvalue = 0 ;
                 
@@ -322,7 +369,7 @@ I2D* mser(I2D* I, int in_delta)
           c - I(ROOT(INDEX)) > I(ROOT(NRINDEX)) as index is extending
               an extremal region, but increasing its level. In this
               case ROOT(NRINDEX) WILL be an extremal region of the
-              final image and the only possibility is to add
+              final image and the only possibility is to a:idd
               ROOT(NRINDEX) as children of ROOT(INDEX).
         */
 
@@ -340,8 +387,20 @@ I2D* mser(I2D* I, int in_delta)
                         /* ROOT(INDEX) becomes the child */
                         forest_pt[rindex] .parent   = nrindex ;
                         forest_pt[rindex] .shortcut = nrindex ;          
-                        forest_pt[nrindex].area    += forest_pt[rindex].area ;
+                        
+                          
+#ifdef  APX //half half it run the C source code properly 
+                        tempApx =  myOp[4]->calc(forest_pt[nrindex].area, forest_pt[rindex].area) ; //AdditionOp
 
+                        tempAcc = forest_pt[nrindex].area + forest_pt[rindex].area ; 
+                        if (tempApx == 0 & tempAcc!=0) {
+                            forest_pt[nrindex].area    = tempAcc;
+                        }else{
+                            forest_pt[nrindex].area    = tempApx;
+                        }
+#else
+                        forest_pt[nrindex].area    += forest_pt[rindex].area ; 
+#endif
 #ifdef USE_RANK_UNION
                         forest_pt[nrindex].height = MAX(nheight, height+1) ;
 #endif
@@ -354,7 +413,20 @@ I2D* mser(I2D* I, int in_delta)
                         /* ROOT(index) becomes parent */
                         forest_pt[nrindex] .parent   = rindex ;
                         forest_pt[nrindex] .shortcut = rindex ;
-                        forest_pt[rindex]  .area    += forest_pt[nrindex].area ;
+                        
+#ifdef APX
+                        
+                        tempApx   = myOp[5]->calc(forest_pt[rindex].area, forest_pt[nrindex].area); //AdditionOp
+                        
+                        tempApx   = forest_pt[rindex].area + forest_pt[nrindex].area; 
+                        if (tempApx == 0 & tempAcc!=0) {
+                            forest_pt[rindex].area = tempAcc;
+                        }else{
+                            forest_pt[rindex].area = tempApx;
+                        }
+#else
+                        forest_pt[rindex]  .area   = forest_pt[rindex].area + forest_pt[nrindex].area ; 
+#endif
 
 #ifdef USE_RANK_UNION
                         forest_pt[rindex].height = MAX(height, nheight+1) ;
@@ -378,7 +450,6 @@ I2D* mser(I2D* I, int in_delta)
                 }
         
             } /* neighbor done */
-      
             /* move to next neighbor */      
             k = 0 ;
             sref(nsubs_pt,k) = sref(nsubs_pt,k) + 1;
@@ -390,9 +461,8 @@ I2D* mser(I2D* I, int in_delta)
             }
         } /* next neighbor */
         done_all_neighbors : ;
+        //cout<<"--------------------"<<endl; 
     } /* next pixel */    
-    
- 
     /* the root of the last processed pixel must be a region */
     forest_pt [rindex].region = ner ;
     regions_pt [ner] .index      = rindex ;
@@ -505,8 +575,19 @@ I2D* mser(I2D* I, int in_delta)
         int area     = regions_pt [i].area ;
         int area_top = regions_pt [i].area_top ;
         int area_bot = regions_pt [i].area_bot ;    
-        regions_pt [i].variation = (area_top - area_bot) / (area*1.0) ;
+        
+#ifdef APX1 //it failes 
+        int temp_Apx =  myOp[6]->calc(area_top,  (-1*area_bot)); //AdditionOp
+        int temp_Acc =  area_top - area_bot; 
 
+        if (tempApx == 0 & tempAcc!=0) {
+            regions_pt [i].variation = temp_Acc / (area*1.0) ; 
+        }else{
+            regions_pt [i].variation = temp_Apx / (area*1.0) ; 
+        }
+#else
+        regions_pt [i].variation = (area_top - area_bot) / (area*1.0) ; 
+#endif
         /* initialize .mastable to 1 for all nodes */
         regions_pt [i].maxstable = 1 ;
     }
@@ -679,7 +760,18 @@ I2D* mser(I2D* I, int in_delta)
                 /* add x_i * x_j */
                 for(index = 0 ; index < nel ; ++ index)
                 {
-                    sref(acc_pt,index) = sref(subs_pt,i) * sref(subs_pt,j) ;
+                    
+#ifdef APX1 //it failes
+                    tempApx = myOp[7]->calc(sref(subs_pt,i), sref(subs_pt,j)) ; //MultiplicationOp
+                    tempAcc = sref(subs_pt,i) * sref(subs_pt,j) ; 
+                    if (tempApx == 0 & tempAcc!=0) {
+                        sref(acc_pt,index) = tempAcc;
+                    }else{
+                        sref(acc_pt,index) = tempApx;
+                    }        
+#else
+                    sref(acc_pt,index) = sref(subs_pt,i) * sref(subs_pt,j) ; 
+#endif
                     adv(dims, ndims, subs_pt) ;
                 }
             }
@@ -742,7 +834,15 @@ I2D* mser(I2D* I, int in_delta)
     free( nsubs_pt   ) ;
     free( subs_pt    ) ;
     free( joins_pt    ) ;
-
+    
+    //behzad added 
+    /* 
+    for (int i =0; i<nmer;i++){
+        cout<<out->data[i]<<endl; 
+        assert(out->data[i] < I->height*I->width);
+    }
+    exit(0); 
+    */ //end of behzad added
     return out;
 }
 

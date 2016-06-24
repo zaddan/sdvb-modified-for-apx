@@ -18,7 +18,7 @@ endif
 
 #CC=gcc
 CC=g++
-override CFLAGS += -DGCC -DCHECK -D$(INPUT) -std=c++11
+override CFLAGS += -DGCC -DCHECK -D$(INPUT) -std=c++11 -fpermissive
 
 COMMON_DIR := $(TOP_DIR)/common/c
 M_COMMON := $(TOP_DIR)/common/matlab
