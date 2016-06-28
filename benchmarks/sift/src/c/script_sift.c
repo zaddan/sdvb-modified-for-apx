@@ -5,6 +5,11 @@ Author: Sravanthi Kota Venkata
 #include <stdio.h>
 #include <stdlib.h>
 #include "sift.h"
+#include "globals.h"
+#include <fstream>
+extern hw_ac **myOp;   
+using namespace std;
+
 #define GENERATE_OUTPUT
 #define CHECK
 void normalizeImage(F2D* image)
@@ -33,6 +38,21 @@ void normalizeImage(F2D* image)
 
 int main(int argc, char* argv[])
 {
+    
+    // Added by Behzad for apxation 
+    string resultFolderName; 
+    string resultFileName; 
+    string operatorFileName;
+    resultFolderName= "/home/local/bulkhead/behzad/usr/local/apx_tool_chain/generated_text";
+    resultFileName = "/home/local/bulkhead/behzad/usr/local/apx_tool_chain/generated_text/csource_output_folder/csource_output0.txt";
+    operatorFileName = "operator_sample.txt";
+    string resultFileNameCompleteAddress = resultFileName;
+    ofstream resultFile;
+
+    resultFile.open(resultFileNameCompleteAddress.c_str(), ios_base::app);
+    assign_global_variables(resultFolderName, operatorFileName);
+    //end of Added by Behzad
+    
     I2D* im;
     F2D *image;
     int rows, cols, i, j;
@@ -63,7 +83,9 @@ int main(int argc, char* argv[])
     endTime = photonEndTiming();
 
     printf("Input size\t\t- (%dx%d)\n", rows, cols);
-   
+    writeMatrix_to_output(frames, (char*) resultFileName.c_str());
+
+
 #ifdef CHECK   
     {
         int ret=0;

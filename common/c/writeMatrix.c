@@ -32,6 +32,29 @@ void writeMatrix_to_output(I2D* input, char* inpath)
 }
 
 
+void writeMatrix_to_output(F2D* input, char* inpath)
+{
+    FILE* fp;
+    int rows,cols, i, j;
+    fp = fopen(inpath, "w");
+
+    rows = input->height;
+    cols = input->width;
+    fprintf(fp, "%s\n", "*********start******");
+    for(i=0; i<rows; i++)
+    {
+        for(j=0; j<cols; j++)
+        {
+            fprintf(fp, "%f\t", subsref(input, i, j));
+        }
+        fprintf(fp, "\n");
+    }
+
+    fprintf(fp, "%s\n", "*********end******");
+    fclose(fp);
+}
+
+
 
 void writeMatrix(I2D* input, char* inpath)
 {
