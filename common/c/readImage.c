@@ -40,6 +40,7 @@ I2D* readImage(const char* pathName)
     if(input == NULL)
     {
         perror("File pointer error");
+        exit(0);
         return NULL;
     }
     else
@@ -71,6 +72,7 @@ I2D* readImage(const char* pathName)
         if(srcImage->height <= 0 || srcImage->width <= 0 || signature[0] != 'B' || signature[1] != 'M'  || ( bits_per_pixel !=24 && bits_per_pixel !=8 ) )
         {
             printf("ERROR in BMP read: The input file is not in standard BMP format");
+            exit(0); 
             return NULL;
         }
         fseek(input,loc_of_bitmap,SEEK_SET);
@@ -103,6 +105,8 @@ I2D* readImage(const char* pathName)
         }
         else
         {
+            printf("got into the final else statement, so something went wrong\n");
+            exit(0);
             return NULL;
         }
 

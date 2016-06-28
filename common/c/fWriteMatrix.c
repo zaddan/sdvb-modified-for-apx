@@ -8,6 +8,7 @@ Author: Sravanthi Kota Venkata
 
 void fWriteMatrix_to_output(F2D* input, char* inpath)
 {
+    
     FILE* fp;
     int rows,cols, i, j;
 
@@ -35,16 +36,17 @@ void fWriteMatrix_to_output(F2D* input, char* inpath)
 
 void fWriteMatrix(F2D* input, char* inpath)
 {
+    
     FILE* fp;
     char im[100];
     int rows,cols, i, j;
 
     sprintf(im, "%s/expected_C.txt", inpath);
     fp = fopen(im, "w");
-
     rows = input->height;
     cols = input->width;
-
+    
+    printf("here ist he rows%\d", rows);
     for(i=0; i<rows; i++)
     {
         for(j=0; j<cols; j++)
@@ -55,6 +57,7 @@ void fWriteMatrix(F2D* input, char* inpath)
     }
 
     fclose(fp);
+
 }
 
 

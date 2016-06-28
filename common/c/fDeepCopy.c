@@ -14,7 +14,6 @@ F2D* fDeepCopy(F2D* in)
     cols = in->width;
 
     out = fMallocHandle(rows, cols);
-    
     for(i=0; i<rows; i++) {
         for(j=0; j<cols; j++) {
             subsref(out,i,j) = subsref(in,i,j);
