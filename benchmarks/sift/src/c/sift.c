@@ -129,7 +129,8 @@ F2D* sift(F2D* I)
     **/
 
     gss = gaussianss(I, sigman, Octaves, subLevels, omin, -1, subLevels+1, sigma0);
-
+    printf("9999999\n");
+    fflush(stdout);
     /** 
         Once we build the gaussian pyramid, we compute DOG, the 
         Difference of Gaussians. At every scale, we do:
@@ -143,7 +144,8 @@ F2D* sift(F2D* I)
     **/
     
     dogss = diffss(gss, Octaves, intervals);
-
+    printf("888\n");
+    fflush(stdout);
     /** The extraction of keypoints is carried one octave per time **/
     for(o=0; o<Octaves; o++)
     {

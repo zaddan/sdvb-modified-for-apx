@@ -1,6 +1,9 @@
 /********************************
 Author: Sravanthi Kota Venkata
 ********************************/
+#include "globals.h"
+#include <assert.h>
+extern hw_ac **myOp;   
 
 #include "sift.h"
 
@@ -38,12 +41,17 @@ F2D** diffss(F2D** ss, int num, int intervals)
             {
                 for(j=0; j<sizeN; j++)
                 {
+                    
+#ifdef APX 
+                    subsref(current,i,j) = myOp[4]->calc(subsref(in1,i,j), -1*subsref(in2,i,j)); //AdditionOp
+#else
                     subsref(current,i,j) = subsref(in1,i,j) - subsref(in2,i,j);
+#endif
+
                 }
             }
         }
     }
-
     return dss;
 
 }

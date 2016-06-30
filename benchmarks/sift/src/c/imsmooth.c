@@ -5,6 +5,10 @@ Author: Sravanthi Kota Venkata
 #include "sift.h"
 #include <math.h>
 #include <assert.h>
+#include "globals.h"
+#include <assert.h>
+extern hw_ac **myOp;   
+
 const double win_factor = 1.5 ;
 const int nbins = 36 ;
 const float threshold = 0.01;
@@ -17,6 +21,7 @@ const float threshold = 0.01;
 
 void imsmooth(F2D* array, float dsigma, F2D* out)
 {
+  float tempVar; 
   int M,N ;
   int i,j,k;
   float s ;
@@ -70,26 +75,47 @@ void imsmooth(F2D* array, float dsigma, F2D* out)
         for(k=startCol; k<=endCol; k++) {
 			assert(k < array->width);
 			assert(filterStart < 2*W+1);
+            
+#ifdef APX1 
+            tempVar =  myOp[0]->calc(subsref(array, j, k),temp[filterStart++]); //MultiplicationOp
+            subsref(buffer,j,i) = myOp[1]->calc(subsref(buffer,j,i), tempVar); //AdditionOp
+#else
             subsref(buffer,j,i) += subsref(array, j, k) * temp[filterStart++];
-		}
+#endif	
+        }
       }
     }
- 
     /*
     ** Convolve along the rows
     **/
+    printf("s");
+    fflush(stdout);
     for(j = 0 ; j < M ; ++j) 
     {
       for(i = 0 ; i < N ; ++i) 
       {
+
         int startRow = MAX(j-W,0);
         int endRow = MIN(j+W, M-1);
         int filterStart = MAX(0, W-j);
-        for(k=startRow; k<=endRow; k++)
+        for(k=startRow; k<=endRow; k++){
+
+#ifdef APX1
+            //tempVar = subsref(buffer,k,i) *  temp[filterStart++]; 
+            //subsref(out,j,i) = tempVar + subsref(out,j,i); 
+            tempVar = myOp[2]->calc(subsref(buffer,k,i),  temp[filterStart++]); //MultiplicationOp
+
+            subsref(out,j,i) = myOp[3]->calc(tempVar, subsref(out,j,i)); //AdditionOp
+#else
             subsref(out,j,i) += subsref(buffer,k,i) * temp[filterStart++];
+#endif	
+        
+        } 
+      
       }
     }  
-  
+   printf("e");
+   fflush(stdout);
     fFreeHandle(buffer);
       
   } 
