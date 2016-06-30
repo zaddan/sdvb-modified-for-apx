@@ -23,8 +23,8 @@ int main(int argc, char* argv[])
     string resultFolderName; 
     string resultFileName; 
     string operatorFileName;
-    resultFolderName= "/home/local/bulkhead/behzad/usr/local/apx_tool_chain_3/generated_text";
-    resultFileName = "/home/local/bulkhead/behzad/usr/local/apx_tool_chain_3/generated_text/csource_output_folder/csource_output0.txt";
+    resultFolderName= "/home/local/bulkhead/behzad/usr/local/apx_tool_chain/generated_text";
+    resultFileName = "/home/local/bulkhead/behzad/usr/local/apx_tool_chain/generated_text/csource_output_folder/csource_output0.txt";
     operatorFileName = "operator_sample.txt";
     string resultFileNameCompleteAddress = resultFileName;
     ofstream resultFile;
