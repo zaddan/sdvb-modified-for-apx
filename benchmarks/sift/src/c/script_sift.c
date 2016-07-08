@@ -43,9 +43,14 @@ int main(int argc, char* argv[])
     string resultFolderName; 
     string resultFileName; 
     string operatorFileName;
+    
+    
+    std::string exe_annex(argv[3]);
+    
     resultFolderName= "/home/local/bulkhead/behzad/usr/local/apx_tool_chain/generated_text";
-    resultFileName = "/home/local/bulkhead/behzad/usr/local/apx_tool_chain/generated_text/csource_output_folder/csource_output0.txt";
-    operatorFileName = "operator_sample.txt";
+    resultFileName = "/home/local/bulkhead/behzad/usr/local/apx_tool_chain/generated_text/csource_output_folder/csource_output"+exe_annex+".txt";
+    
+    operatorFileName = "operator_sample" + exe_annex + ".txt";
     string resultFileNameCompleteAddress = resultFileName;
     ofstream resultFile;
 
