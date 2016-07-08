@@ -66,7 +66,7 @@ COMMON_SRC := $(wildcard $(COMMON_DIR)/*.c)
 
 # RULES
 
-EXE =
+EXE = $(exe_annex)
 INCLUDES = -I$(COMMON_DIR) -I$(C_DIR) -I$(C_DIR_OPRATORS_inc) -I$(C_DIR_BookKeeping_inc) 
 COMPILE_C = $(CC) $(CFLAGS) -lm -O2 $(INCLUDES)
 #COMPILE_C = $(CC) $(CFLAGS) -DGENERATE_OUTPUT -lm -O2 $(INCLUDES)
@@ -75,7 +75,7 @@ COMPILE_PG = $(COMPILE_G) -pg
 
 c-run: compile
 	@echo -e "Data set\t\t- $(INPUT)" 
-	@./$(BMARK)$(EXE) $(DATA_DIR) $(C_RESULT) | tee $(TIMING_DIR)/C_$(INPUT).txt
+	@./$(BMARK)$(EXE) $(DATA_DIR) $(C_RESULT) $(EXE)| tee $(TIMING_DIR)/C_$(INPUT).txt
 
 debug:
 	@echo Running Debug C Version of the benchmark

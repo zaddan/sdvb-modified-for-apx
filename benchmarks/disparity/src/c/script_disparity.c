@@ -23,9 +23,12 @@ int main(int argc, char* argv[])
     string resultFolderName; 
     string resultFileName; 
     string operatorFileName;
-    resultFolderName= "/home/local/bulkhead/behzad/usr/local/apx_tool_chain_3/generated_text";
-    resultFileName = "/home/local/bulkhead/behzad/usr/local/apx_tool_chain_3/generated_text/csource_output_folder/csource_output0.txt";
-    operatorFileName = "operator_sample.txt";
+    //string exe_annex; 
+    std::string exe_annex(argv[3]);
+
+    resultFolderName= "/home/local/bulkhead/behzad/usr/local/apx_tool_chain/generated_text";
+    resultFileName = "/home/local/bulkhead/behzad/usr/local/apx_tool_chain/generated_text/csource_output_folder/csource_output"+exe_annex+".txt";
+    operatorFileName = "operator_sample" + exe_annex + ".txt";
     string resultFileNameCompleteAddress = resultFileName;
     ofstream resultFile;
 
@@ -51,7 +54,8 @@ int main(int argc, char* argv[])
         printf("We need input image path and output path\n");
         return -1;
     }
-
+    printf("getting exe\n"); 
+    printf("%s\n", argv[3]);
     sprintf(im1, "%s/1.bmp", argv[1]);
     sprintf(im2, "%s/2.bmp", argv[1]);
     
@@ -82,7 +86,7 @@ int main(int argc, char* argv[])
 
     printf("Input size\t\t- (%dx%d)\n", rows, cols);
     writeMatrix_to_output(retDisparity, (char*) resultFileName.c_str());
-#ifdef CHECK   
+#ifdef CHECK_1
     /** Self checking - use expected.txt from data directory  **/
     {
         int tol, ret=0;
