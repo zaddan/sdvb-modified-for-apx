@@ -122,7 +122,7 @@ void writeMatrix_to_output(I2D* input, char* inpath);
 void writeMatrix_to_output(F2D* input, char* inpath);
 void fWriteMatrix(F2D* input, char* inpath);
 void fWriteMatrix_to_output(F2D* input, char* inpath);
-
+void populate_matrix_with_infinity(F2D* input);
 /** Timing functions **/
 unsigned int* photonEndTiming();
 unsigned int* photonStartTiming();

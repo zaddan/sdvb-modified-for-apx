@@ -6,6 +6,7 @@ Author: Sravanthi Kota Venkata
 #include "sift.h"
 #include <iostream>
 using namespace std;
+bool results_tainted = true; 
 /** SIFT- Scale Invariant Feature Transform. This algorithm is based on
     David Lowe's implementation of sift. So, we will use the parameter
     values from Lowe's implementation.
@@ -129,8 +130,6 @@ F2D* sift(F2D* I)
     **/
 
     gss = gaussianss(I, sigman, Octaves, subLevels, omin, -1, subLevels+1, sigma0);
-    printf("9999999\n");
-    fflush(stdout);
     /** 
         Once we build the gaussian pyramid, we compute DOG, the 
         Difference of Gaussians. At every scale, we do:
@@ -144,8 +143,6 @@ F2D* sift(F2D* I)
     **/
     
     dogss = diffss(gss, Octaves, intervals);
-    printf("888\n");
-    fflush(stdout);
     /** The extraction of keypoints is carried one octave per time **/
     for(o=0; o<Octaves; o++)
     {
@@ -319,11 +316,36 @@ F2D* sift(F2D* I)
             else
                 frames = fDeepCopy(oframes);
             firstIn = 0;
+        
+        results_tainted = false;
         }
         else if(Octaves == 1) {
             frames = fDeepCopy(oframes);
+            cout<<"frames heigh"<<    oframes->height << "frames width"<< oframes->width<<endl;
+            results_tainted = false;
         }
-        
+        /* 
+        else{//behzad added, this is just here to ensure that frames get populated
+              //to avoid segfaults
+            F2D* temp_;
+            temp_ = fTranspose(oframes);
+            fFreeHandle(oframes);
+            oframes = siftrefinemx(temp_, temp, smin, thresh, r, sizeRows, sizeCols, intervals-1);
+            fFreeHandle(temp_);
+
+            if( firstIn == 0)
+            {
+                tfr = fDeepCopy(frames);
+                fFreeHandle(frames);
+                frames = fHorzcat(tfr, oframes);
+                fFreeHandle(tfr);
+            }
+            else
+                frames = fDeepCopy(oframes);
+            firstIn = 0;
+            results_tainted = true; 
+        }
+        */
         fFreeHandle(oframes);
         iFreeHandle(y);
         iFreeHandle(x);
@@ -348,6 +370,13 @@ F2D* sift(F2D* I)
     
     
     }
+    /* 
+    if(results_tainted) { 
+        cout<<"\nattention" << "results is tainted"<<endl;
+        cout<<" explanation: we know this b/c we entered a corner case that was not defined in the csource and was added by me(behzad)"<<endl;
+        cout<<"more explanation: the case for when asubsref(oframes,0) != 0) or Octaves!=1 wasn't defined, hence to avoid segfault I added to else claused but this needs to be avoided"<<endl;
+    }
+    */
     { int s;
     for(o=0; o<Octaves; o++)
     {
@@ -367,7 +396,7 @@ F2D* sift(F2D* I)
     }
     free(gss);
     free(dogss);
-    
+    //cout<<"frames heigh"<<    frames->height << "frames width"<< frames->width<<endl;
     return frames;
 }
 

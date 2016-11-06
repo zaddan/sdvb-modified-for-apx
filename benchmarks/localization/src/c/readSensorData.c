@@ -18,9 +18,9 @@ F2D* readSensorData(I2D* index, F2D* fid, I2D* type, I2D* eof)
     rows = fid->height;
     asubsref(type,0) = 0;
     retData = fSetArray(1, 8, 0);
-    
-    if( asubsref(index,0) > (rows-1) )
+    if( asubsref(index,0) > (rows-1) ){
         asubsref(eof,0) = 1;
+    }
     else
     {
         if( asubsref(index,0) == rows)

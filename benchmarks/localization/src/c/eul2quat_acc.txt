@@ -1,0 +1,78 @@
+/********************************
+Author: Sravanthi Kota Venkata
+********************************/
+
+#include <stdio.h>
+#include <stdlib.h>
+#include "localization.h"
+#include "globals.h"
+#include <assert.h>
+extern hw_ac **myOp;   
+
+F2D* eul2quat(F2D* angle)
+{
+    F2D *ret;
+    F2D *x, *y, *z;
+    int k, i, j;
+    int rows, cols;
+
+    rows = angle->height;
+    cols = angle->width;
+
+    x = fDeepCopyRange(angle, 0, angle->height, 0, 1);
+    y = fDeepCopyRange(angle, 0, angle->height, 1, 1);
+    z = fDeepCopyRange(angle, 0, angle->height, 2, 1);
+
+    ret = fSetArray(x->height, 4, 0);
+    
+    for(i=0; i<rows; i++)
+    {
+        float xi, yi, zi;
+        k = 0;
+        xi = asubsref(x,i);
+        yi = asubsref(y,i);
+        zi = asubsref(z,i);
+
+        float tempVar[8];
+        //subsref(ret,i,k) = cos(xi/2)*cos(yi/2)*cos(zi/2)+sin(xi/2)*sin(yi/2)*sin(zi/2);
+        tempVar[0] = myOp[0]->calc(cos(xi/2),cos(yi/2)); //MultiplicationOpIgnore
+        tempVar[0] = myOp[1]->calc(tempVar[0],cos(zi/2)); //MultiplicationOpIgnore
+        tempVar[1] =  myOp[2]->calc(sin(xi/2),sin(yi/2)); //MultiplicationOpIgnore
+        tempVar[1] = myOp[3]->calc(tempVar[1],sin(zi/2)); //MultiplicationOpIgnore
+        subsref(ret,i,k) = myOp[4]->calc(tempVar[0], tempVar[1]); //AdditionOpIgnore
+        k++;
+        
+        //subsref(ret,i,k) = sin(xi/2)*cos(yi/2)*cos(zi/2)-cos(xi/2)*sin(yi/2)*sin(zi/2);
+        tempVar[2] = myOp[5]->calc(sin(xi/2),cos(yi/2)); //MultiplicationOpIgnore
+        tempVar[2] = myOp[6]->calc(tempVar[2],cos(zi/2)); //MultiplicationOpIgnore 
+        tempVar[3] =  myOp[7]->calc(cos(xi/2),sin(yi/2)); //MultiplicationOpIgnore
+        tempVar[3] = myOp[8]->calc(tempVar[3],sin(zi/2));//MultiplicationOpIgnore
+        subsref(ret,i,k) = myOp[9]->calc(tempVar[2],  -1*tempVar[3]); //AdditionOpIgnore
+        k++;
+        
+        //subsref(ret,i,k) = cos(xi/2)*sin(yi/2)*cos(zi/2)+sin(xi/2)*cos(yi/2)*sin(zi/2);
+        tempVar[4] = myOp[10]->calc(cos(xi/2),sin(yi/2)); //MultiplicationOpIgnore
+        tempVar[4] = myOp[11]->calc(tempVar[4], cos(zi/2)); //MultiplicationOpIgnore
+        tempVar[5] =  myOp[12]->calc(sin(xi/2),cos(yi/2)); //MultiplicationOpIgnore
+        tempVar[5] = myOp[13]->calc(tempVar[5],sin(zi/2));//MultiplicationOpIgnore
+        subsref(ret,i,k) = myOp[14]->calc(tempVar[4], tempVar[5]); //AdditionOpIgnore
+        k++;
+        
+        
+        //subsref(ret,i,k) = cos(xi/2)*cos(yi/2)*sin(zi/2)-sin(xi/2)*sin(yi/2)*cos(zi/2);
+        tempVar[6] = myOp[15]->calc(cos(xi/2),cos(yi/2)); //MultiplicationOpIgnore
+        tempVar[6] = myOp[16]->calc(tempVar[6] ,sin(zi/2)); //MultiplicationOpIgnore
+        tempVar[7] =  myOp[17]->calc(sin(xi/2),sin(yi/2)); //MultiplicationOpIgnore
+        tempVar[7] = myOp[18]->calc(tempVar[7],cos(zi/2));//MultiplicationOpIgnore
+        subsref(ret,i,k) = myOp[19]->calc(tempVar[6], tempVar[7]); //AdditionOpIgnore
+    }
+
+    fFreeHandle(x);
+    fFreeHandle(y);
+    fFreeHandle(z);
+
+    return ret;
+}
+
+
+

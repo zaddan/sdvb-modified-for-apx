@@ -9,8 +9,8 @@ Author: Sravanthi Kota Venkata
 #include <fstream>
 extern hw_ac **myOp;   
 using namespace std;
-
-#define GENERATE_OUTPUT
+extern bool results_tainted;
+//#define GENERATE_OUTPUT
 #define CHECK
 void normalizeImage(F2D* image)
 {
@@ -84,9 +84,14 @@ int main(int argc, char* argv[])
 	normalizeImage(image);
     /** Extract sift features for the normalized image **/
     frames = sift(image);
-    printf("got here\n"); 
+    
+    if (results_tainted) {
+        frames = fMallocHandle(4, 1);
+        populate_matrix_with_infinity(frames);
+        asubsref(frames, 3) = 1;
+    }
+    
     endTime = photonEndTiming();
-
     printf("Input size\t\t- (%dx%d)\n", rows, cols);
     writeMatrix_to_output(frames, (char*) resultFileName.c_str());
 
@@ -98,9 +103,7 @@ int main(int argc, char* argv[])
 #ifdef GENERATE_OUTPUT
         fWriteMatrix(frames, argv[1]);
 #endif
-        printf("I deactivated the self check since it was giviing me segfault\n");
-        //ret = fSelfCheck(frames, argv[1], tol);
-        ret = -1 ;
+        ret = fSelfCheck(frames, argv[1], tol);
         if (ret == -1)
             printf("Error in SIFT\n");
     }
@@ -108,7 +111,6 @@ int main(int argc, char* argv[])
 
     elapsed = photonReportTiming(startTime, endTime);
     photonPrintTiming(elapsed);
-    
     free(startTime);
     free(endTime);
     free(elapsed);

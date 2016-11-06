@@ -1,0 +1,23 @@
+/********************************
+Author: Sravanthi Kota Venkata
+********************************/
+
+#include "globals.h"
+#include "sdvbs_common.h"
+extern hw_ac **myOp;   
+
+F2D* fTimes_mod(F2D* a, F2D* b)
+{
+    F2D *c;
+    int i, j, rows, cols;
+
+    rows = a->height;
+    cols = a->width;
+
+    c = fMallocHandle(rows, cols);
+    
+    for(i=0; i<(rows*cols); i++)
+        asubsref(c,i) = myOp[48]->calc(asubsref(a,i), asubsref(b,i)); //MultiplicationOpIgnore
+
+    return c;
+}

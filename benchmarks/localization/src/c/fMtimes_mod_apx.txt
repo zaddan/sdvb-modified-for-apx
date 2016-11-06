@@ -1,0 +1,43 @@
+/********************************
+Author: Sravanthi Kota Venkata
+********************************/
+
+#include "globals.h"
+#include "sdvbs_common.h"
+extern hw_ac **myOp;   
+
+F2D* fMtimes_mod(F2D* a, F2D* b)
+{
+    F2D *out;
+    int m, p, p1, n, i, j, k;
+    float temp;
+
+    m = a->height;
+    p = a->width;
+
+    p1 = b->height;
+    n = b->width;
+
+    out = fMallocHandle(m,n);
+
+    for(i=0; i<m; i++)
+    {
+        for(j=0; j<n; j++)
+        {
+            temp = 0;
+            for(k=0; k<p; k++)
+            {
+                float tempVar; 
+                tempVar = myOp[49]->calc(subsref(b,k,j), subsref(a,i,k)); //MultiplicationOp
+                temp = myOp[50]->calc(temp, tempVar); //AdditionOp
+                //temp += subsref(b,k,j) * subsref(a,i,k);
+            }
+            subsref(out,i,j) = temp;
+        }
+    }
+
+    return out;
+}
+
+
+

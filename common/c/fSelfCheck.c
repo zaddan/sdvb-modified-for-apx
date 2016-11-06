@@ -3,7 +3,8 @@ Author: Sravanthi Kota Venkata
 ********************************/
 
 #include "sdvbs_common.h"
-
+#include <iostream>
+using namespace std;
 int fSelfCheck(F2D* in1, char* path, float tol)
 {
     int r1, c1, ret=1;
@@ -42,7 +43,6 @@ int fSelfCheck(F2D* in1, char* path, float tol)
     for(i=0; i<r1*c1; i++)
     {
         float inVal = asubsref(in1,i);
-        printf("here are the values %f\n", buffer[i]);
         if( (inVal-buffer[i])>tol || (buffer[i]-inVal)>tol )
         {
             printf("Mismatch %d: (%f, %f)\n", i, buffer[i], inVal);

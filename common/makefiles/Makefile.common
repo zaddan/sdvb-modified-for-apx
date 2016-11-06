@@ -18,8 +18,9 @@ endif
 
 
 CC=g++
-override CFLAGS += -DGCC -DCHECK -D$(INPUT) -std=c++11 -fpermissive -O3 -g
+#override CFLAGS += -DGCC -DCHECK -D$(INPUT) -std=c++11 -fpermissive -O3 -g -w
 #override CFLAGS += -DGCC -DCHECK -D$(INPUT) -std=c++11 -fpermissive -O3 -Ofast
+override CFLAGS += -DGCC -DCHECK -D$(INPUT) -std=c++11 -fpermissive -w -g
 COMMON_DIR := $(TOP_DIR)/common/c
 M_COMMON := $(TOP_DIR)/common/matlab
 M_TOOLBOX=$(TOP_DIR)/common/toolbox
@@ -63,19 +64,27 @@ C_DIR_BookKeeping_inc=$(TOP_DIR)/../apx_tool_chain/inc/BookKeeping
 
 C_SRC := $(wildcard $(C_DIR)/*.c $(C_DIR_OPRATORS)/*.cpp $(C_DIR_BookKeeping)/*.cpp)
 COMMON_SRC := $(wildcard $(COMMON_DIR)/*.c)
+COMMON_SRC := $(wildcard $(COMMON_DIR)/*.c)
 
 # RULES
 
 EXE = $(exe_annex)
 INCLUDES = -I$(COMMON_DIR) -I$(C_DIR) -I$(C_DIR_OPRATORS_inc) -I$(C_DIR_BookKeeping_inc) 
-COMPILE_C = $(CC) $(CFLAGS) -lm -O2 $(INCLUDES)
+COMPILE_C = $(CC) $(CFLAGS) -lm -O0 $(INCLUDES)
 #COMPILE_C = $(CC) $(CFLAGS) -DGENERATE_OUTPUT -lm -O2 $(INCLUDES)
 COMPILE_G = $(CC) $(CFLAGS) -g -lm $(INCLUDES)
 COMPILE_PG = $(COMPILE_G) -pg
 
-c-run: compile
+#c-run: compile
+c-run: 
 	@echo -e "Data set\t\t- $(INPUT)" 
-	@./$(BMARK)$(EXE) $(DATA_DIR) $(C_RESULT) $(EXE)| tee $(TIMING_DIR)/C_$(INPUT).txt
+	./$(BMARK)$(EXE) $(DATA_DIR) $(C_RESULT) $(EXE) $(input_1) $(input_2)| tee $(TIMING_DIR)/C_$(INPUT).txt
+
+c-run-compile: compile
+	@echo -e "Data set\t\t- $(INPUT)" 
+	./$(BMARK)$(EXE) $(DATA_DIR) $(C_RESULT) $(EXE) $(input_1) $(input_2)| tee $(TIMING_DIR)/C_$(INPUT).txt
+
+
 
 debug:
 	@echo Running Debug C Version of the benchmark
@@ -94,6 +103,7 @@ compile: $(C_SRC)
 	@echo 
 	@echo -e "Benchmark\t\t- $(BMARK)"
 	@$(COMPILE_C) $(COMMON_SRC) $(C_SRC) -o $(BMARK)$(EXE)
+	@echo "done compiling"
 
 compile-prof: $(C_SRC)
 	@echo 

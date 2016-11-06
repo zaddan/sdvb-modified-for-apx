@@ -88,7 +88,7 @@ void imsmooth(F2D* array, float dsigma, F2D* out)
     /*
     ** Convolve along the rows
     **/
-    printf("s");
+    printf(".");
     fflush(stdout);
     for(j = 0 ; j < M ; ++j) 
     {
@@ -114,7 +114,7 @@ void imsmooth(F2D* array, float dsigma, F2D* out)
       
       }
     }  
-   printf("e");
+   printf(".");
    fflush(stdout);
     fFreeHandle(buffer);
       
