@@ -8,7 +8,7 @@ Author: Sravanthi Kota Venkata
 #include <iostream>
 #include "globals.h"
 #include <fstream>
-
+#define CHECK
 extern hw_ac **myOp;   
 extern long double energy_value;
 extern vector<int> add_long_long_energy_counters;
@@ -111,16 +111,16 @@ int  main(int argc, char **argv)
     //--- calc energy and writing it to a file 
     float energy_value_aggreagate = 0;
     for (int i =0; i<add_long_long_energy_counters.size(); i++) {
-        energy_value_aggreagate += add_long_long_energy_counters[i]*int(add_long_long_energy_vals[i]*10000*.3);
-        energy_value_aggreagate += add_long_int_energy_counters[i]*int(add_long_int_energy_vals[i]*.3*1000);
-        energy_value_aggreagate += add_int_int_energy_counters[i]*int(add_int_int_energy_vals[i]*.3*1000);
-        energy_value_aggreagate += add_float_float_energy_counters[i]*int(add_float_float_energy_vals[i]*.3*1000);
-        energy_value_aggreagate += mul_long_long_energy_counters[i]*int(mul_long_long_energy_vals[i]*1000);
-        energy_value_aggreagate += mul_long_int_energy_counters[i]*int(mul_long_int_energy_vals[i]*1000);
-        energy_value_aggreagate += mul_int_int_energy_counters[i]*int(mul_int_int_energy_vals[i]*1000);
-        energy_value_aggreagate += mul_float_float_energy_counters[i]*int(mul_float_float_energy_vals[i]*1000);
+        energy_value_aggreagate += add_long_long_energy_counters[i]*add_long_long_energy_vals[i];
+        energy_value_aggreagate += add_long_int_energy_counters[i]*add_long_int_energy_vals[i];
+        energy_value_aggreagate += add_int_int_energy_counters[i]*add_int_int_energy_vals[i];
+        energy_value_aggreagate += add_float_float_energy_counters[i]*add_float_float_energy_vals[i];
+        energy_value_aggreagate += mul_long_long_energy_counters[i]*mul_long_long_energy_vals[i];
+        energy_value_aggreagate += mul_long_int_energy_counters[i]*mul_long_int_energy_vals[i];
+        energy_value_aggreagate += mul_int_int_energy_counters[i]*mul_int_int_energy_vals[i];
+        energy_value_aggreagate += mul_float_float_energy_counters[i]*mul_float_float_energy_vals[i];
     }
-
+    
     ofstream energy_result;
     energy_result.open((resultFolderName + "/energy_result.txt").c_str());
     //energy_result<<energy_value<<endl; 

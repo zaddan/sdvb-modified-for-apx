@@ -171,19 +171,31 @@ int create_candidates(int x,int y, params* data)
             address = aa( arrayref(xloopout,x+j), arrayref(yloopout,y-i) );
             arrayref(candlistx,n) = arrayref(atlas,address) - j;
             arrayref(candlisty,n) = arrayref(atlas,address+1) + i;
-
+            int temp1 =  myOp[0]->calc(vrfinishx, -1*vrstartx); //AdditionOp
+            int temp2 =  myOp[1]->calc(vrfinishy, -1*vrstarty); //AdditionOp
+            int temp3, temp4; 
+            
             if( arrayref(candlistx,n) >= vrfinishx || arrayref(candlistx,n) < vrstartx) 
             {
-                arrayref(candlistx,n) = vrstartx + (int)(drand48()*(vrfinishx-vrstartx));
-                arrayref(candlisty,n) = vrstarty + (int)(drand48()*(vrfinishy-vrstarty));
+                
+                temp3 =  (int)(drand48()*temp1);
+                temp4 = (int)(drand48()* temp2);
+                arrayref(candlistx,n) = myOp[2]->calc(vrstartx, temp3); //AdditionOp
+                arrayref(candlisty,n) = myOp[3]->calc(vrstarty, temp4); //AdditionOp
+                //arrayref(candlistx,n) = vrstartx + (int)(drand48()*(vrfinishx-vrstartx));
+                //arrayref(candlisty,n) = vrstarty + (int)(drand48()*(vrfinishy-vrstarty));
                 n++;
                 continue;
             }
 
             if( arrayref(candlisty,n) >= vrfinishy )
             {
-                arrayref(candlisty,n) = vrstarty + (int)(drand48()*(vrfinishy-vrstarty));
-                arrayref(candlistx,n) = vrstartx + (int)(drand48()*(vrfinishx-vrstartx));
+                
+                
+                temp4 = (int)(drand48()* temp2);
+                temp3 =  (int)(drand48()*temp1);
+                arrayref(candlisty,n) = myOp[4]->calc(vrstarty, temp4); //AdditionOp
+                arrayref(candlistx,n) = myOp[5]->calc(vrstartx, temp3); //AdditionOp
                 n++;
                 continue;
             }
@@ -208,6 +220,11 @@ int create_candidates(int x,int y, params* data)
 int create_all_candidates(int x,int y, params* data)
 {
     int address,i,j,k,n = 0;
+    int temp1 =  myOp[6]->calc(vrfinishx, -1*vrstartx); //AdditionOp
+    int temp2 =  myOp[7]->calc(vrfinishy, -1*vrstarty); //AdditionOp
+    int temp3;
+    int temp4; 
+
     for(i=-data->localy/2;i<=data->localy/2;i++)
     {
         for(j=-data->localx/2;j<=data->localx/2;j++)
@@ -221,8 +238,16 @@ int create_all_candidates(int x,int y, params* data)
 
             if( arrayref(candlistx,n) >= vrfinishx || arrayref(candlistx,n) < vrstartx) 
             {
-                arrayref(candlistx,n) = vrstartx + (int)(drand48()*(vrfinishx-vrstartx));
-                arrayref(candlisty,n) = vrstarty + (int)(drand48()*(vrfinishy-vrstarty));
+               
+                temp3 =  (int)(drand48()*temp1);
+                temp4 = (int)(drand48()* temp2);
+                arrayref(candlistx,n) = myOp[8]->calc(vrstartx, temp3); //AdditionOp
+                arrayref(candlisty,n) = myOp[9]->calc(vrstarty, temp4); //AdditionOp
+               
+               //arrayref(candlistx,n) = vrstartx + (int)(drand48()*(vrfinishx-vrstartx));
+                //arrayref(candlisty,n) = vrstarty + (int)(drand48()*(vrfinishy-vrstarty));
+                
+                
                 n++;
 //                printf("1: (%d,%d)\t%d\n", i,j,n);
                 continue;
@@ -230,8 +255,15 @@ int create_all_candidates(int x,int y, params* data)
 
             if( arrayref(candlisty,n) >= vrfinishy || arrayref(candlisty,n) < vrstarty)
             {
-                arrayref(candlisty,n) = vrstarty + (int)(drand48()*(vrfinishy-vrstarty));
-                arrayref(candlistx,n) = vrstartx + (int)(drand48()*(vrfinishx-vrstartx));
+                
+                
+                temp4 = (int)(drand48()* temp2);
+                temp3 =  (int)(drand48()*temp1);
+                arrayref(candlisty,n) = myOp[10]->calc(vrstarty, temp4); //AdditionOp
+                arrayref(candlistx,n) = myOp[11]->calc(vrstartx,temp3); //AdditionOp
+                
+                //arrayref(candlisty,n) = vrstarty + (int)(drand48()*(vrfinishy-vrstarty));
+                //arrayref(candlistx,n) = vrstartx + (int)(drand48()*(vrfinishx-vrstartx));
                 n++;
 //                printf("2: (%d,%d)\t%d\n", i,j,n);
                 continue;
@@ -263,6 +295,8 @@ void init(F2D *image, params* data)
     vrstartx = data->localx/2; vrstarty = data->localy/2;
     vrfinishx = data->widthin-data->localx/2;
     vrfinishy = data->heightin-data->localy/2;
+    int temp1 =  myOp[12]->calc(vrfinishx, -1*vrstartx); //AdditionOp
+    int temp2 =  myOp[13]->calc(vrfinishy, -1*vrstarty); //AdditionOp
     for(i=0;i<data->heightout;i++)
     {
         for(j=0;j<data->widthout;j++)
@@ -273,8 +307,13 @@ void init(F2D *image, params* data)
 //            && asubsref(target,a(j,i,data->widthout)+B) == 1.0
             )
             {
-                tmpx = vrstartx + (int)(drand48()*(vrfinishx-vrstartx));
-                tmpy = vrstarty + (int)(drand48()*(vrfinishy-vrstarty));
+                
+                int temp3 =  (int)(drand48()*temp1);
+                int temp4 = (int)(drand48()* temp2);
+                tmpx = myOp[14]->calc(vrstartx,temp3); //AdditionOp
+                tmpy = myOp[15]->calc(vrstarty, temp4); //AdditionOp
+                //tmpx = vrstartx + (int)(drand48()*(vrfinishx-vrstartx));
+                //tmpy = vrstarty + (int)(drand48()*(vrfinishy-vrstarty));
                 if(!anotherpass)
                 {
                     arrayref(atlas,aa(j,i)) = tmpx; 
@@ -307,7 +346,8 @@ double compare_full_neighb(F2D *image,int x, int y, F2D *image1,int x1, int y1, 
                 addr1 = a( arrayref(xloopout,x1+j), arrayref(yloopout,y1+i), data->widthout);
 
                 tmp = asubsref(image,addr+R) - asubsref(image1,addr1+R);
-                res += tmp*tmp;
+                res += myOp[16]->calc(tmp, tmp); //MultiplicationOp
+                //res += tmp*tmp;
 //                tmp = asubsref(image,addr+G) - asubsref(image1,addr1+G);
 //                res += tmp*tmp;
 //                tmp = asubsref(image,addr+B) - asubsref(image1,addr1+B);
@@ -333,7 +373,8 @@ double compare_neighb(F2D *image,int x, int y, F2D *image1,int x1, int y1, param
             addr1 = a( arrayref(xloopout,x1+j), arrayref(yloopout,y1+i), data->widthout);
 
             tmp = asubsref(image,addr+R) - asubsref(image1,addr1+R);
-            res += tmp*tmp;
+            res += myOp[17]->calc(tmp, tmp); //MultiplicationOp
+            //res += tmp*tmp;
 //            tmp = asubsref(image,addr+G) - asubsref(image1,addr1+G);
 //            res += tmp*tmp;
 //            tmp = asubsref(image,addr+B) - asubsref(image1,addr1+B);
@@ -347,7 +388,8 @@ double compare_neighb(F2D *image,int x, int y, F2D *image1,int x1, int y1, param
         addr1 = a( arrayref(xloopout,x1+j), y1, data->widthout);
 
         tmp = asubsref(image,addr+R) - asubsref(image1,addr1+R);
-        res += tmp*tmp;
+        res += myOp[18]->calc(tmp, tmp); //MultiplicationOp
+        //res += tmp*tmp;
 //        tmp = asubsref(image,addr+G) - asubsref(image1,addr1+G);
 //        res += tmp*tmp;
 //        tmp = asubsref(image,addr+B) - asubsref(image1,addr1+B);
@@ -372,7 +414,8 @@ double compare_rest(F2D *image,int x, int y, F2D *tar,int x1, int y1, params* da
             if( asubsref(tar,addr1+R) != 1.0) //KVS?
             {
                 tmp = asubsref(image,addr+R) - asubsref(tar,addr1+R);
-                res += tmp*tmp;
+                res += myOp[19]->calc(tmp, tmp); //MultiplicationOp
+                //res += tmp*tmp;
 //                tmp = asubsref(image,addr+G) - asubsref(tar,addr1+G);
 //                res += tmp*tmp;
 //                tmp = asubsref(image,addr+B) - asubsref(tar,addr1+B);
@@ -388,7 +431,8 @@ double compare_rest(F2D *image,int x, int y, F2D *tar,int x1, int y1, params* da
         if( asubsref(tar,addr1+R) != 1.0)   // KVS?
         {
             tmp = asubsref(image,addr+R) - asubsref(tar,addr1+R);
-            res += tmp*tmp;
+            res += myOp[20]->calc(tmp, tmp); //MultiplicationOp
+            //res += tmp*tmp;
 //            tmp = asubsref(image,addr+G) - asubsref(tar,addr1+G);
 //            res += tmp*tmp;
 //            tmp = asubsref(image,addr+B) - asubsref(tar,addr1+B);
